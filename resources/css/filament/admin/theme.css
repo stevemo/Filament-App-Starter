@@ -54,3 +54,25 @@
         @apply !ml-1;
     }
 }
+
+/* Content */
+.fi-main {
+    @apply lg:pl-12 !important;
+}
+
+.fi-ta-ctn {
+    @apply shadow-xl;
+}
+
+.fi-header-heading {
+    @apply !text-2xl text-primary-600 dark:text-primary-400;
+}
+
+.fi-header-subheading {
+    @apply !text-sm;
+}
+
+/* Filament Actions */
+.fi-dropdown-trigger button.fi-btn {
+    @apply !p-1;
+}
