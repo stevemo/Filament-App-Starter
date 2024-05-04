@@ -8,6 +8,7 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
@@ -17,27 +18,66 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-users';
+
+    protected static ?string $navigationGroup = 'Access';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('username')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->maxLength(255),
-            ]);
+                Forms\Components\Section::make('Bio')
+                    ->schema([
+                        Forms\Components\Grid::make()
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('email')
+                                    ->email()
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('username')
+                                    ->unique(ignoreRecord: true)
+                                    ->maxLength(255),
+                            ]),
+                    ])
+                    ->columnSpan([
+                        'sm' => 1,
+                        'lg' => 2,
+                    ]),
+                Forms\Components\Group::make()
+                    ->schema([
+                        Forms\Components\Section::make('Security')
+                            ->schema([
+                                Forms\Components\TextInput::make('password')
+                                    ->password()
+                                    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
+                                    ->dehydrated(fn (?string $state): bool => filled($state))
+                                    ->revealable()
+                                    ->required(),
+                                Forms\Components\TextInput::make('passwordConfirmation')
+                                    ->password()
+                                    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
+                                    ->dehydrated(fn (?string $state): bool => filled($state))
+                                    ->revealable()
+                                    ->same('password')
+                                    ->required(),
+                            ])
+                            ->compact()
+                            ->hidden(fn (string $operation): bool => $operation === 'edit'),
+                        Forms\Components\Section::make()
+                            ->schema([
+                                Forms\Components\Placeholder::make('created_at')
+                                    ->content(fn (User $record): ?string => $record->created_at?->format('M j, Y H:i')),
+                                Forms\Components\Placeholder::make('updated_at')
+                                    ->content(fn (User $record): ?string => $record->updated_at?->format('M j, Y H:i')),
+                            ])
+                            ->hidden(fn (string $operation): bool => $operation === 'create'),
+                    ])
+                    ->columnSpan(1),
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
