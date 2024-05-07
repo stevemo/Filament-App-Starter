@@ -95,26 +95,33 @@ class UserResource extends Resource implements HasShieldPermissions
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->color(fn (User $user) => $user->trashed() ? 'danger' : '')
                     ->description(fn (Model $record) => $record->username)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->color(fn (User $user) => $user->trashed() ? 'danger' : '')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('roles.name')
+                    ->color(fn (User $user) => $user->trashed() ? 'danger' : '')
                     ->badge()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
+                    ->color(fn (User $user) => $user->trashed() ? 'danger' : '')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->color(fn (User $user) => $user->trashed() ? 'danger' : '')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->color(fn (User $user) => $user->trashed() ? 'danger' : '')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('deleted_at')
+                    ->color(fn (User $user) => $user->trashed() ? 'danger' : '')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -123,7 +130,10 @@ class UserResource extends Resource implements HasShieldPermissions
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hidden(fn (User $record): bool => $record->trashed()),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ]);
     }
 
