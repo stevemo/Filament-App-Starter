@@ -48,6 +48,14 @@ class UserResource extends Resource
                     ]),
                 Forms\Components\Group::make()
                     ->schema([
+                        Forms\Components\Section::make('Roles')
+                            ->schema([
+                                Forms\Components\CheckboxList::make('roles')
+                                    ->hiddenLabel()
+                                    ->relationship('roles', 'name')
+                                    ->columnStart(1),
+                            ]),
+
                         Forms\Components\Section::make('Security')
                             ->schema([
                                 Forms\Components\TextInput::make('password')
@@ -66,6 +74,7 @@ class UserResource extends Resource
                             ])
                             ->compact()
                             ->hidden(fn (string $operation): bool => $operation === 'edit'),
+
                         Forms\Components\Section::make()
                             ->schema([
                                 Forms\Components\Placeholder::make('created_at')
