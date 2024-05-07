@@ -9,6 +9,7 @@ use Filament\PanelProvider;
 use App\Settings\GeneralSettings;
 use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\Storage;
+use App\Filament\Pages\Auth\CustomLogin;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -29,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(CustomLogin::class)
             ->colors([
                 'primary' => Color::Sky,
             ])
