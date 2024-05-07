@@ -6,8 +6,9 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
-use App\Settings\GeneralSetting;
+use App\Settings\GeneralSettings;
 use Filament\Support\Colors\Color;
+use Illuminate\Support\Facades\Storage;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -34,7 +35,10 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->sidebarFullyCollapsibleOnDesktop()
             ->maxContentWidth('full')
-            ->brandName(fn (GeneralSetting $settings) => $settings->brand_name)
+            ->favicon(fn (GeneralSettings $settings) => Storage::url($settings->site_favicon))
+            ->brandName(fn (GeneralSettings $settings) => $settings->brand_name)
+            ->brandLogo(fn (GeneralSettings $settings) => Storage::url($settings->brand_logo))
+            ->brandLogoHeight(fn (GeneralSettings $settings) => $settings->brand_logoHeight)
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

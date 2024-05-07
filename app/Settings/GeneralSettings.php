@@ -4,7 +4,7 @@ namespace App\Settings;
 
 use Spatie\LaravelSettings\Settings;
 
-class GeneralSetting extends Settings
+class GeneralSettings extends Settings
 {
     public ?string $brand_name;
 
