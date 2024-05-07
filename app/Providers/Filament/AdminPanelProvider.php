@@ -33,17 +33,23 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Sky,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
+
             ->sidebarFullyCollapsibleOnDesktop()
             ->maxContentWidth('full')
+
             ->favicon(fn (GeneralSettings $settings) => Storage::url($settings->site_favicon))
             ->brandName(fn (GeneralSettings $settings) => $settings->brand_name)
             ->brandLogo(fn (GeneralSettings $settings) => blank($settings->brand_logo) ? null : Storage::url($settings->brand_logo))
             ->brandLogoHeight(fn (GeneralSettings $settings) => $settings->brand_logoHeight)
+            ->colors(fn (GeneralSettings $settings) => $settings->site_theme)
+
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
+
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,

@@ -62,6 +62,19 @@ class ManageGeneralSetting extends SettingsPage
                                     ->columnStart(1)
                                     ->deleteUploadedFileUsing(fn (Get $get) => Storage::delete(app(GeneralSettings::class)->site_favicon)),
                             ]),
+
+                        Tabs\Tab::make('Colors')
+                            ->icon('fluentui-color-24-o')
+                            ->schema([
+                                Forms\Components\ColorPicker::make('site_theme.primary')->rgb(),
+                                Forms\Components\ColorPicker::make('site_theme.secondary')->rgb(),
+                                Forms\Components\ColorPicker::make('site_theme.success')->rgb(),
+                                Forms\Components\ColorPicker::make('site_theme.danger')->rgb(),
+                                Forms\Components\ColorPicker::make('site_theme.info')->rgb(),
+                                Forms\Components\ColorPicker::make('site_theme.warning')->rgb(),
+                                Forms\Components\ColorPicker::make('site_theme.gray')->rgb(),
+                            ])
+                            ->columns(3),
                     ]),
             ]);
     }
