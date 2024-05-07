@@ -16,7 +16,13 @@ class ManageGeneralSetting extends SettingsPage
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
 
+    protected static ?string $navigationGroup = 'Settings';
+
+    protected static ?string $navigationLabel = 'General';
+
     protected static string $settings = GeneralSettings::class;
+
+    protected static ?int $navigationSort = 99;
 
     public function getRedirectUrl(): ?string
     {
@@ -57,13 +63,6 @@ class ManageGeneralSetting extends SettingsPage
                                     ->deleteUploadedFileUsing(fn (Get $get) => Storage::delete(app(GeneralSettings::class)->site_favicon)),
                             ]),
                     ]),
-                // Forms\Components\Section::make('Site')
-                //     ->label('Site')
-                //     ->description('Manage basic settings.')
-                //     ->icon('fluentui-web-asset-24-o')
-                //     ->schema([
-
-                //     ]),
             ]);
     }
 }
