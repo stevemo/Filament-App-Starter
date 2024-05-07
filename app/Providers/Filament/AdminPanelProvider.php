@@ -37,7 +37,7 @@ class AdminPanelProvider extends PanelProvider
             ->maxContentWidth('full')
             ->favicon(fn (GeneralSettings $settings) => Storage::url($settings->site_favicon))
             ->brandName(fn (GeneralSettings $settings) => $settings->brand_name)
-            ->brandLogo(fn (GeneralSettings $settings) => Storage::url($settings->brand_logo))
+            ->brandLogo(fn (GeneralSettings $settings) => blank($settings->brand_logo) ? null : Storage::url($settings->brand_logo))
             ->brandLogoHeight(fn (GeneralSettings $settings) => $settings->brand_logoHeight)
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

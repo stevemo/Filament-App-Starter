@@ -3,10 +3,12 @@
 namespace App\Filament\Pages;
 
 use Filament\Forms;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use App\Settings\GeneralSettings;
 use Filament\Forms\Components\Tabs;
+use Illuminate\Support\Facades\Storage;
 
 class ManageGeneralSetting extends SettingsPage
 {
@@ -37,20 +39,22 @@ class ManageGeneralSetting extends SettingsPage
                                     ->required(),
 
                                 Forms\Components\FileUpload::make('brand_logo')
-                                    ->directory('sites')
-                                    ->visibility('public')
+                                    ->directory('settings')
                                     ->moveFiles()
                                     ->columnStart(1)
-                                    ->columnSpan(2),
+                                    ->columnSpan(2)
+                                    ->deleteUploadedFileUsing(fn (Get $get) => Storage::delete(app(GeneralSettings::class)->brand_logo)),
 
                                 Forms\Components\TextInput::make('brand_logoHeight')
-                                    ->columnSpan(1),
+                                    ->columnSpan(1)
+                                    ->formatStateUsing(fn (string $state): string => str($state)->remove('rem'))
+                                    ->dehydrateStateUsing(fn (string $state): string => $state.'rem'),
 
                                 Forms\Components\FileUpload::make('site_favicon')
-                                    ->directory('sites')
-                                    ->visibility('public')
+                                    ->directory('settings')
                                     ->moveFiles()
-                                    ->columnStart(1),
+                                    ->columnStart(1)
+                                    ->deleteUploadedFileUsing(fn (Get $get) => Storage::delete(app(GeneralSettings::class)->site_favicon)),
                             ]),
                     ]),
                 // Forms\Components\Section::make('Site')
