@@ -13,8 +13,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class UserResource extends Resource
+class UserResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = User::class;
 
@@ -48,6 +49,14 @@ class UserResource extends Resource
                     ]),
                 Forms\Components\Group::make()
                     ->schema([
+                        Forms\Components\Section::make('Roles')
+                            ->schema([
+                                Forms\Components\CheckboxList::make('roles')
+                                    ->hiddenLabel()
+                                    ->relationship('roles', 'name')
+                                    ->columnStart(1),
+                            ]),
+
                         Forms\Components\Section::make('Security')
                             ->schema([
                                 Forms\Components\TextInput::make('password')
@@ -66,6 +75,7 @@ class UserResource extends Resource
                             ])
                             ->compact()
                             ->hidden(fn (string $operation): bool => $operation === 'edit'),
+
                         Forms\Components\Section::make()
                             ->schema([
                                 Forms\Components\Placeholder::make('created_at')
@@ -142,5 +152,17 @@ class UserResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'restore',
+            'delete',
+        ];
     }
 }

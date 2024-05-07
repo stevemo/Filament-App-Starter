@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
@@ -33,7 +34,6 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Sky,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
-
             ->sidebarFullyCollapsibleOnDesktop()
             ->maxContentWidth('full')
 
@@ -55,6 +55,9 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
+            ->plugins([
+                $this->enableShieldPlugin(),
+            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -68,6 +71,26 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ]);
+    }
+
+    protected function enableShieldPlugin(): FilamentShieldPlugin
+    {
+        return FilamentShieldPlugin::make()
+            ->gridColumns([
+                'default' => 1,
+                'sm'      => 2,
+                'lg'      => 3,
+            ])
+            ->sectionColumnSpan(1)
+            ->checkboxListColumns([
+                'default' => 1,
+                'sm'      => 2,
+                'lg'      => 2,
+            ])
+            ->resourceCheckboxListColumns([
+                'default' => 1,
+                'sm'      => 2,
             ]);
     }
 }
