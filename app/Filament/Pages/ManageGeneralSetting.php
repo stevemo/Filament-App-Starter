@@ -9,9 +9,12 @@ use Filament\Pages\SettingsPage;
 use App\Settings\GeneralSettings;
 use Filament\Forms\Components\Tabs;
 use Illuminate\Support\Facades\Storage;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 
 class ManageGeneralSetting extends SettingsPage
 {
+    use HasPageShield;
+
     protected $listeners = ['$refresh'];
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
