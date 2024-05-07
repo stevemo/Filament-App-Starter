@@ -33,7 +33,6 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Sky,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
-
             ->sidebarFullyCollapsibleOnDesktop()
             ->maxContentWidth('full')
 
@@ -54,6 +53,9 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+            ])
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
             ])
             ->middleware([
                 EncryptCookies::class,
