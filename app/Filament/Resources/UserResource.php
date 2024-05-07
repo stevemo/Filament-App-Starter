@@ -132,7 +132,8 @@ class UserResource extends Resource implements HasShieldPermissions
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->hidden(fn (User $record): bool => $record->trashed()),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->hidden(fn (User $record): bool => $record->id === auth()->id() or $record->trashed()),
                 Tables\Actions\RestoreAction::make(),
             ]);
     }
