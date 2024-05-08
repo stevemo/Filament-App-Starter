@@ -18,7 +18,7 @@ use Spatie\Permission\Models\Permission;
 uses(
     Tests\TestCase::class,
     Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Feature');
+)->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------
