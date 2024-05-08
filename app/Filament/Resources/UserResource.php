@@ -100,6 +100,8 @@ class UserResource extends Resource implements HasShieldPermissions
     {
         return $table
             ->columns([
+                Tables\Columns\ViewColumn::make('avatar')
+                    ->view('filament.tables.columns.avatar'),
                 Tables\Columns\TextColumn::make('name')
                     ->color(fn (User $user) => $user->trashed() ? 'danger' : '')
                     ->description(fn (Model $record) => $record->username)
