@@ -119,9 +119,9 @@ class AdminPanelProvider extends PanelProvider
             $table->paginationPageOptions($settings->pagination);
         });
 
-        Table::$defaultDateTimeDisplayFormat = $settings->default_date_time_display_format;
+        Table::$defaultDateTimeDisplayFormat = $settings->date_time_display_format;
 
-        Infolist::$defaultDateTimeDisplayFormat = $settings->default_date_time_display_format;
+        Infolist::$defaultDateTimeDisplayFormat = $settings->date_time_display_format;
 
         DatePicker::configureUsing(function (DatePicker $datePicker) use ($settings) {
             $datePicker
@@ -133,7 +133,7 @@ class AdminPanelProvider extends PanelProvider
             $dateTimePicker
                 ->minutesStep(5)
                 ->seconds(false)
-                ->displayFormat($settings->default_date_time_display_format)
+                ->displayFormat($settings->date_time_display_format)
                 ->native(false);
         });
     }

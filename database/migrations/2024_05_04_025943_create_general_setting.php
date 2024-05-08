@@ -6,7 +6,7 @@ return new class extends SettingsMigration
 {
     public function up(): void
     {
-        $this->migrator->add('general.brand_name', 'Filament Starter App');
+        $this->migrator->add('general.brand_name', 'Starter App');
         $this->migrator->add('general.brand_logo', null);
         $this->migrator->add('general.brand_logoHeight', '3rem');
         $this->migrator->add('general.site_favicon', null);
@@ -20,7 +20,7 @@ return new class extends SettingsMigration
             'warning'   => 'rgb(255, 186, 93)',
         ]);
         $this->migrator->add('general.pagination', [25, 50, 75]);
-        $this->migrator->add('general.default_date_time_display_format', 'M j, Y H:i');
+        $this->migrator->add('general.date_time_display_format', 'M j, Y H:i');
         $this->migrator->add('general.datepicker_format', 'M j, Y');
     }
 };

@@ -77,7 +77,7 @@ class ManageGeneralSetting extends SettingsPage
                             ])
                             ->columns(3),
 
-                        Tabs\Tab::make('Component')
+                        Tabs\Tab::make('Components')
                             ->icon('fluentui-puzzle-piece-24')
                             ->columns(4)
                             ->schema([
@@ -95,7 +95,7 @@ class ManageGeneralSetting extends SettingsPage
                                         75    => 75,
                                     ]),
 
-                                Forms\Components\Radio::make('default_date_time_display_format')
+                                Forms\Components\Radio::make('date_time_display_format')
                                     ->required()
                                     ->columns(2)
                                     ->columnSpan(3)
