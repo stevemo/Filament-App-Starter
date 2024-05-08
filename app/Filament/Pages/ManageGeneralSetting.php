@@ -79,19 +79,38 @@ class ManageGeneralSetting extends SettingsPage
 
                         Tabs\Tab::make('Component')
                             ->icon('fluentui-puzzle-piece-24')
-                            ->columns(3)
+                            ->columns(4)
                             ->schema([
                                 Forms\Components\ToggleButtons::make('pagination')
                                     ->hint('To customize the default number of records shown')
                                     ->multiple()
                                     ->inline()
                                     ->required()
+                                    ->columnSpan(2)
                                     ->options([
                                         'all' => 'All',
                                         10    => 10,
                                         25    => 25,
                                         50    => 50,
                                         75    => 75,
+                                    ]),
+
+                                Forms\Components\Radio::make('default_date_time_display_format')
+                                    ->required()
+                                    ->columns(2)
+                                    ->columnSpan(3)
+                                    ->columnStart(1)
+                                    ->options([
+                                        'M j, Y H:i' => now()->format('M j, Y H:i'),
+                                        'M j, Y h:i' => now()->format('M j, Y h:i'),
+                                        'j M, Y H:i' => now()->format('j M, Y H:i'),
+                                        'j M, Y h:i' => now()->format('j M, Y h:i'),
+                                    ])
+                                    ->descriptions([
+                                        'M j, Y H:i' => 'Month Day Year in 24 Hours Format',
+                                        'M j, Y h:i' => 'Month Day Year in 12 Hours Format',
+                                        'j M, Y H:i' => 'Day Month Year in 24 Hours Format',
+                                        'j M, Y h:i' => 'Day Month Year in 12 Hours Format',
                                     ]),
                             ]),
                     ]),

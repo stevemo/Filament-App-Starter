@@ -18,6 +18,8 @@ class GeneralSettings extends Settings
 
     public array $pagination;
 
+    public string $default_date_time_display_format;
+
     public static function group(): string
     {
         return 'general';

@@ -20,5 +20,6 @@ return new class extends SettingsMigration
             'warning'   => 'rgb(255, 186, 93)',
         ]);
         $this->migrator->add('general.pagination', [25, 50, 75]);
+        $this->migrator->add('general.default_date_time_display_format', 'M j, Y H:i');
     }
 };

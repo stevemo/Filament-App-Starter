@@ -112,5 +112,7 @@ class AdminPanelProvider extends PanelProvider
         Table::configureUsing(function (Table $table): void {
             $table->paginationPageOptions(app(GeneralSettings::class)->pagination);
         });
+
+        Table::$defaultDateTimeDisplayFormat = app(GeneralSettings::class)->default_date_time_display_format;
     }
 }
