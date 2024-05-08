@@ -21,5 +21,6 @@ return new class extends SettingsMigration
         ]);
         $this->migrator->add('general.pagination', [25, 50, 75]);
         $this->migrator->add('general.default_date_time_display_format', 'M j, Y H:i');
+        $this->migrator->add('general.datepicker_format', 'M j, Y');
     }
 };

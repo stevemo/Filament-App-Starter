@@ -112,6 +112,20 @@ class ManageGeneralSetting extends SettingsPage
                                         'j M, Y H:i' => 'Day Month Year in 24 Hours Format',
                                         'j M, Y h:i' => 'Day Month Year in 12 Hours Format',
                                     ]),
+
+                                Forms\Components\Radio::make('datepicker_format')
+                                    ->required()
+                                    ->columns(2)
+                                    ->columnSpan(3)
+                                    ->columnStart(1)
+                                    ->options([
+                                        'M j, Y' => now()->format('M j, Y'),
+                                        'j M, Y' => now()->format('j M, Y'),
+                                    ])
+                                    ->descriptions([
+                                        'M j, Y' => 'Month Day Year',
+                                        'j M, Y' => 'Day Month Year',
+                                    ]),
                             ]),
                     ]),
             ]);

@@ -7,12 +7,14 @@ use Filament\Panel;
 use Filament\Widgets;
 use Filament\Tables\Table;
 use Filament\PanelProvider;
+use Filament\Infolists\Infolist;
 use App\Settings\GeneralSettings;
 use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\Storage;
 use App\Filament\Pages\Auth\CustomLogin;
 use App\Filament\Pages\Auth\EditProfile;
+use Filament\Forms\Components\DatePicker;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -29,7 +31,7 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $this->configureTable();
+        $this->configureComponents();
 
         return $panel
             ->default()
@@ -107,12 +109,23 @@ class AdminPanelProvider extends PanelProvider
             ]);
     }
 
-    public function configureTable(): void
+    public function configureComponents(): void
     {
-        Table::configureUsing(function (Table $table): void {
-            $table->paginationPageOptions(app(GeneralSettings::class)->pagination);
+        /** @var GeneralSettings */
+        $settings = app(GeneralSettings::class);
+
+        Table::configureUsing(function (Table $table) use ($settings) {
+            $table->paginationPageOptions($settings->pagination);
         });
 
-        Table::$defaultDateTimeDisplayFormat = app(GeneralSettings::class)->default_date_time_display_format;
+        Table::$defaultDateTimeDisplayFormat = $settings->default_date_time_display_format;
+
+        Infolist::$defaultDateTimeDisplayFormat = $settings->default_date_time_display_format;
+
+        DatePicker::configureUsing(function (DatePicker $datePicker) use ($settings) {
+            $datePicker
+                ->displayFormat($settings->datepicker_format)
+                ->native(false);
+        });
     }
 }

@@ -20,6 +20,8 @@ class GeneralSettings extends Settings
 
     public string $default_date_time_display_format;
 
+    public string $datepicker_format;
+
     public static function group(): string
     {
         return 'general';
