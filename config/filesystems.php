@@ -64,6 +64,14 @@ return [
             'throw'      => false,
         ],
 
+        'avatar' => [
+            'driver'     => 'local',
+            'root'       => storage_path('app/avatar'),
+            'url'        => env('APP_URL').'/storage/avatar',
+            'visibility' => 'public',
+            'throw'      => false,
+        ],
+
     ],
 
     /*
@@ -80,6 +88,7 @@ return [
     'links' => [
         public_path('storage')          => storage_path('app/public'),
         public_path('storage/settings') => storage_path('app/settings'),
+        public_path('storage/avatar')   => storage_path('app/avatar'),
     ],
 
 ];

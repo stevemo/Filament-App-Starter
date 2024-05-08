@@ -31,6 +31,12 @@ class UserResource extends Resource implements HasShieldPermissions
                     ->schema([
                         Forms\Components\Grid::make()
                             ->schema([
+                                Forms\Components\FileUpload::make('avatar')
+                                    ->disk('avatar')
+                                    ->hiddenLabel()
+                                    ->avatar()
+                                    ->alignCenter()
+                                    ->columnSpanFull(),
                                 Forms\Components\TextInput::make('name')
                                     ->required()
                                     ->maxLength(255),
