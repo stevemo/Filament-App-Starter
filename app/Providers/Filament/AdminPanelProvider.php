@@ -7,9 +7,11 @@ use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
 use App\Settings\GeneralSettings;
+use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\Storage;
 use App\Filament\Pages\Auth\CustomLogin;
+use App\Filament\Pages\Auth\EditProfile;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -31,6 +33,12 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login(CustomLogin::class)
+            ->profile()
+            ->userMenuItems([
+                'profile' => MenuItem::make()
+                    ->url(fn (): string => EditProfile::getUrl())
+                    ->label(fn (): string => auth()->user()->name),
+            ])
             ->colors([
                 'primary' => Color::Sky,
             ])
