@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -13,8 +17,8 @@
 
 uses(
     Tests\TestCase::class,
-    // Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Feature');
+    Illuminate\Foundation\Testing\RefreshDatabase::class,
+)->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +46,30 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function login(array $permissions = [], ?User $user = null)
 {
-    // ..
+    $user = $user ?? User::factory()->create();
+
+    if (! blank($permissions)) {
+        $role = Role::findOrCreate('test');
+        $role->syncPermissions(createPermissions($permissions));
+        $user->assignRole($role);
+    }
+
+    return test()->actingAs($user);
+}
+
+function createUser(string $role = 'test', array $permissions = []): User
+{
+    $role = Role::findOrCreate($role);
+    $role->syncPermissions(createPermissions($permissions));
+
+    return User::factory()
+        ->create()
+        ->assignRole($role);
+}
+
+function createPermissions(array $permissions)
+{
+    return collect($permissions)->map(fn ($permission) => Permission::findOrCreate($permission));
 }
