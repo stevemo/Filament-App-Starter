@@ -31,7 +31,13 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $this->configureComponents();
+        /**
+         * when running test, the settings database is not yet created
+         * so we need to cancel components configuration
+         */
+        if (! app()->runningInConsole()) {
+            $this->configureComponents();
+        }
 
         return $panel
             ->default()
