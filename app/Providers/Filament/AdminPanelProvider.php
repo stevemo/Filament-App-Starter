@@ -10,7 +10,6 @@ use Filament\PanelProvider;
 use Filament\Infolists\Infolist;
 use App\Settings\GeneralSettings;
 use Filament\Navigation\MenuItem;
-use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\Storage;
 use App\Filament\Pages\Auth\CustomLogin;
 use App\Filament\Pages\Auth\EditProfile;
@@ -44,9 +43,6 @@ class AdminPanelProvider extends PanelProvider
                 'profile' => MenuItem::make()
                     ->url(fn (): string => EditProfile::getUrl())
                     ->label(fn (): string => auth()->user()->name),
-            ])
-            ->colors([
-                'primary' => Color::Sky,
             ])
 
             ->viteTheme('resources/css/filament/admin/theme.css')
