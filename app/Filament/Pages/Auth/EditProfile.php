@@ -8,9 +8,11 @@ use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Hash;
 use Filament\Support\Exceptions\Halt;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
+use Illuminate\Validation\Rules\Password;
 use Filament\Support\Facades\FilamentView;
 use Illuminate\Contracts\Auth\Authenticatable;
 
@@ -26,9 +28,27 @@ class EditProfile extends Page
 
     public ?array $profileData = [];
 
+    public ?array $passwordData = [];
+
     public function mount(): void
     {
         $this->fillForms();
+    }
+
+    protected function getForms(): array
+    {
+        return [
+            'editProfileForm',
+            'editPasswordForm',
+        ];
+    }
+
+    protected function fillForms(): void
+    {
+        $data = $this->getUser()->attributesToArray();
+
+        $this->editProfileForm->fill($data);
+        $this->editPasswordForm->fill();
     }
 
     public function editProfileForm(Form $form): Form
@@ -65,12 +85,53 @@ class EditProfile extends Page
             ->statePath('profileData');
     }
 
+    public function editPasswordForm(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\Section::make('Update Password')
+                    ->aside()
+                    ->description('Ensure your account is using long, random password to stay secure.')
+                    ->schema([
+                        Forms\Components\TextInput::make('Current password')
+                            ->password()
+                            ->required()
+                            ->currentPassword(),
+                        Forms\Components\TextInput::make('password')
+                            ->password()
+                            ->required()
+                            ->rule(Password::default()->min(6))
+                            ->revealable()
+                            ->autocomplete('new-password')
+                            ->dehydrateStateUsing(fn ($state): string => Hash::make($state))
+                            ->live(debounce: 500)
+                            ->same('passwordConfirmation'),
+                        Forms\Components\TextInput::make('passwordConfirmation')
+                            ->password()
+                            ->required()
+                            ->revealable()
+                            ->dehydrated(false),
+                    ]),
+            ])
+            ->model($this->getUser())
+            ->statePath('passwordData');
+    }
+
     protected function getUpdateProfileFormActions(): array
     {
         return [
             Action::make('updateProfileAction')
                 ->label('Save profile')
                 ->submit('editProfileForm'),
+        ];
+    }
+
+    protected function getUpdatePasswordFormActions(): array
+    {
+        return [
+            Action::make('updatePasswordAction')
+                ->label('Save password')
+                ->submit('editPasswordForm'),
         ];
     }
 
@@ -89,6 +150,29 @@ class EditProfile extends Page
         $this->redirect($this->getUrl(), navigate: FilamentView::hasSpaMode() && is_app_url($this->getUrl()));
     }
 
+    public function updatePassword(): void
+    {
+        try {
+            $data = $this->editPasswordForm->getState();
+
+            unset($data['Current password']);
+
+            $this->handleRecordUpdate($this->getUser(), $data);
+        } catch (Halt $exception) {
+            return;
+        }
+
+        if (request()->hasSession() && array_key_exists('password', $data)) {
+            request()->session()->put([
+                'password_hash_'.Filament::getAuthGuard() => $data['password'],
+            ]);
+        }
+
+        $this->editPasswordForm->fill();
+
+        $this->sendSuccessNotification('New password saved successfully!');
+    }
+
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
         $record->update($data);
@@ -102,20 +186,6 @@ class EditProfile extends Page
             ->success()
             ->title($message)
             ->send();
-    }
-
-    protected function getForms(): array
-    {
-        return [
-            'editProfileForm',
-        ];
-    }
-
-    protected function fillForms(): void
-    {
-        $data = $this->getUser()->attributesToArray();
-
-        $this->editProfileForm->fill($data);
     }
 
     protected function getUser(): Authenticatable&Model
