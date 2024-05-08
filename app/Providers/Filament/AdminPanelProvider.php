@@ -16,6 +16,7 @@ use App\Filament\Pages\Auth\CustomLogin;
 use App\Filament\Pages\Auth\EditProfile;
 use Filament\Forms\Components\DatePicker;
 use Filament\Http\Middleware\Authenticate;
+use Filament\Forms\Components\DateTimePicker;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
@@ -125,6 +126,14 @@ class AdminPanelProvider extends PanelProvider
         DatePicker::configureUsing(function (DatePicker $datePicker) use ($settings) {
             $datePicker
                 ->displayFormat($settings->datepicker_format)
+                ->native(false);
+        });
+
+        DateTimePicker::configureUsing(function (DateTimePicker $dateTimePicker) use ($settings) {
+            $dateTimePicker
+                ->minutesStep(5)
+                ->seconds(false)
+                ->displayFormat($settings->default_date_time_display_format)
                 ->native(false);
         });
     }
