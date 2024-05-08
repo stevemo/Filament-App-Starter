@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
+use Filament\Tables\Table;
 use Filament\PanelProvider;
 use App\Settings\GeneralSettings;
 use Filament\Navigation\MenuItem;
@@ -28,6 +29,8 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $this->configureTable();
+
         return $panel
             ->default()
             ->id('admin')
@@ -102,5 +105,12 @@ class AdminPanelProvider extends PanelProvider
                 'default' => 1,
                 'sm'      => 2,
             ]);
+    }
+
+    public function configureTable(): void
+    {
+        Table::configureUsing(function (Table $table): void {
+            $table->paginationPageOptions(app(GeneralSettings::class)->pagination);
+        });
     }
 }

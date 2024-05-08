@@ -19,5 +19,6 @@ return new class extends SettingsMigration
             'info'      => 'rgb(113, 12, 195)',
             'warning'   => 'rgb(255, 186, 93)',
         ]);
+        $this->migrator->add('general.pagination', [25, 50, 75]);
     }
 };

@@ -76,6 +76,24 @@ class ManageGeneralSetting extends SettingsPage
                                 Forms\Components\ColorPicker::make('site_theme.gray')->rgb(),
                             ])
                             ->columns(3),
+
+                        Tabs\Tab::make('Component')
+                            ->icon('fluentui-puzzle-piece-24')
+                            ->columns(3)
+                            ->schema([
+                                Forms\Components\ToggleButtons::make('pagination')
+                                    ->hint('To customize the default number of records shown')
+                                    ->multiple()
+                                    ->inline()
+                                    ->required()
+                                    ->options([
+                                        'all' => 'All',
+                                        10    => 10,
+                                        25    => 25,
+                                        50    => 50,
+                                        75    => 75,
+                                    ]),
+                            ]),
                     ]),
             ]);
     }

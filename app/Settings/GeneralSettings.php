@@ -16,6 +16,8 @@ class GeneralSettings extends Settings
 
     public array $site_theme;
 
+    public array $pagination;
+
     public static function group(): string
     {
         return 'general';
