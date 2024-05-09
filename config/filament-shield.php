@@ -67,6 +67,7 @@ return [
 
         'pages' => [
             'Dashboard',
+            'EditProfile',
         ],
 
         'widgets' => [

@@ -22,6 +22,7 @@ use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Saade\FilamentLaravelLog\FilamentLaravelLogPlugin;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -50,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
                     ->url(fn (): string => EditProfile::getUrl())
                     ->label(fn (): string => auth()->user()->name),
             ])
+            ->navigationGroups(['Control Panel'])
 
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->sidebarFullyCollapsibleOnDesktop()
@@ -74,7 +76,8 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\FilamentInfoWidget::class,
             ])
             ->plugins([
-                $this->enableShieldPlugin(),
+                $this->shieldPlugin(),
+                $this->laravelLogPlugin(),
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -92,7 +95,7 @@ class AdminPanelProvider extends PanelProvider
             ]);
     }
 
-    protected function enableShieldPlugin(): FilamentShieldPlugin
+    protected function shieldPlugin(): FilamentShieldPlugin
     {
         return FilamentShieldPlugin::make()
             ->gridColumns([
@@ -112,7 +115,18 @@ class AdminPanelProvider extends PanelProvider
             ]);
     }
 
-    public function configureComponents(): void
+    protected function laravelLogPlugin(): FilamentLaravelLogPlugin
+    {
+        return FilamentLaravelLogPlugin::make()
+            ->authorize(fn (): bool => auth()->user()->can('page_ViewLog'))
+            ->navigationGroup('Control Panel')
+            ->navigationLabel('Logs')
+            ->navigationIcon('heroicon-o-bug-ant')
+            ->navigationSort(1)
+            ->slug('logs');
+    }
+
+    protected function configureComponents(): void
     {
         /** @var GeneralSettings */
         $settings = app(GeneralSettings::class);
