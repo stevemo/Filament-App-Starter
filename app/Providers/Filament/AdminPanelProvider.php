@@ -22,6 +22,7 @@ use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Saade\FilamentLaravelLog\FilamentLaravelLogPlugin;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -75,6 +76,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 $this->enableShieldPlugin(),
+                $this->laravelLogPlugin(),
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -110,6 +112,17 @@ class AdminPanelProvider extends PanelProvider
                 'default' => 1,
                 'sm'      => 2,
             ]);
+    }
+
+    protected function laravelLogPlugin(): FilamentLaravelLogPlugin
+    {
+        return FilamentLaravelLogPlugin::make()
+            ->authorize(fn (): bool => auth()->user()->can('page_ViewLog'))
+            ->navigationGroup('Control Panel')
+            ->navigationLabel('Logs')
+            ->navigationIcon('heroicon-o-bug-ant')
+            ->navigationSort(1)
+            ->slug('logs');
     }
 
     public function configureComponents(): void
