@@ -117,6 +117,7 @@ class AdminPanelProvider extends PanelProvider
     protected function laravelLogPlugin(): FilamentLaravelLogPlugin
     {
         return FilamentLaravelLogPlugin::make()
+            ->authorize(fn (): bool => auth()->user()->can('page_ViewLog'))
             ->navigationGroup('Control Panel')
             ->navigationLabel('Logs')
             ->navigationIcon('heroicon-o-bug-ant')
