@@ -47,67 +47,8 @@ class ManageGeneralSetting extends SettingsPage
                     ->contained(false)
                     ->columnSpanFull()
                     ->tabs([
-                        Tabs\Tab::make('Site')
-                            ->icon('fluentui-web-asset-24-o')
-                            ->schema([
-                                Grid::make(['md' => 2])
-                                    ->schema([
-                                        Group::make([
-                                            Section::make('Site Name')
-                                                ->icon('fluentui-home-person-24')
-                                                ->schema([
-                                                    TextInput::make('brand_name')
-                                                        ->hiddenLabel()
-                                                        ->required(),
-                                                ])->columnSpan(1),
-                                            Section::make('Favicon')
-                                                ->icon('fluentui-circle-image-28')
-                                                ->schema([
-                                                    FileUpload::make('site_favicon')
-                                                        ->hiddenLabel()
-                                                        ->directory('settings')
-                                                        ->moveFiles()
-                                                        ->columnStart(1)
-                                                        ->deleteUploadedFileUsing(fn (Get $get) => Storage::delete(app(GeneralSettings::class)->site_favicon)),
-                                                ]),
-                                        ]),
-
-                                        Group::make([
-                                            Section::make('Site Logo')
-                                                ->icon('fluentui-image-28-o')
-                                                ->columns(3)
-                                                ->schema([
-                                                    FileUpload::make('brand_logo')
-                                                        ->columnSpanFull()
-                                                        ->hiddenLabel()
-                                                        ->directory('settings')
-                                                        ->moveFiles()
-                                                        ->deleteUploadedFileUsing(fn (Get $get) => Storage::delete(app(GeneralSettings::class)->brand_logo)),
-
-                                                    TextInput::make('brand_logoHeight')
-                                                        ->label('Logo Height')
-                                                        ->columnSpan(1)
-                                                        ->suffix('rem')
-                                                        ->formatStateUsing(fn (string $state): string => str($state)->remove('rem'))
-                                                        ->dehydrateStateUsing(fn (string $state): string => $state.'rem'),
-                                                ]),
-                                        ]),
-                                    ]),
-                            ]),
-
-                        Tabs\Tab::make('Colors')
-                            ->icon('fluentui-color-24-o')
-                            ->schema([
-                                ColorPicker::make('site_theme.primary')->rgb(),
-                                ColorPicker::make('site_theme.secondary')->rgb(),
-                                ColorPicker::make('site_theme.success')->rgb(),
-                                ColorPicker::make('site_theme.danger')->rgb(),
-                                ColorPicker::make('site_theme.info')->rgb(),
-                                ColorPicker::make('site_theme.warning')->rgb(),
-                                ColorPicker::make('site_theme.gray')->rgb(),
-                            ])
-                            ->columns(3),
-
+                        $this->siteTab(),
+                        $this->colorTab(),
                         Tabs\Tab::make('Components')
                             ->icon('fluentui-puzzle-piece-24')
                             ->columns(4)
@@ -158,6 +99,87 @@ class ManageGeneralSetting extends SettingsPage
                                         'j M, Y' => 'Day Month Year',
                                     ]),
                             ]),
+                    ]),
+            ]);
+    }
+
+    protected function siteTab(): Tabs\Tab
+    {
+        return Tabs\Tab::make('Site')
+            ->icon('fluentui-web-asset-24-o')
+            ->schema([
+                Grid::make(['md' => 2])
+                    ->schema([
+                        Group::make([
+                            Section::make('Site Name')
+                                ->icon('fluentui-home-person-24')
+                                ->schema([
+                                    TextInput::make('brand_name')
+                                        ->hiddenLabel()
+                                        ->required(),
+                                ])->columnSpan(1),
+                            Section::make('Favicon')
+                                ->icon('fluentui-circle-image-28')
+                                ->schema([
+                                    FileUpload::make('site_favicon')
+                                        ->hiddenLabel()
+                                        ->directory('settings')
+                                        ->moveFiles()
+                                        ->columnStart(1)
+                                        ->deleteUploadedFileUsing(fn (Get $get) => Storage::delete(app(GeneralSettings::class)->site_favicon)),
+                                ]),
+                        ]),
+
+                        Group::make([
+                            Section::make('Site Logo')
+                                ->icon('fluentui-image-28-o')
+                                ->columns(3)
+                                ->schema([
+                                    FileUpload::make('brand_logo')
+                                        ->columnSpanFull()
+                                        ->hiddenLabel()
+                                        ->directory('settings')
+                                        ->moveFiles()
+                                        ->deleteUploadedFileUsing(fn (Get $get) => Storage::delete(app(GeneralSettings::class)->brand_logo)),
+
+                                    TextInput::make('brand_logoHeight')
+                                        ->label('Logo Height')
+                                        ->columnSpan(1)
+                                        ->suffix('rem')
+                                        ->formatStateUsing(fn (string $state): string => str($state)->remove('rem'))
+                                        ->dehydrateStateUsing(fn (string $state): string => $state.'rem'),
+                                ]),
+                        ]),
+                    ]),
+            ]);
+    }
+
+    protected function colorTab(): Tabs\Tab
+    {
+        return Tabs\Tab::make('Colors')
+            ->icon('fluentui-color-24-o')
+            ->schema([
+                Grid::make(2)
+                    ->schema([
+                        Group::make([
+                            Section::make('Main Colors')
+                                ->icon('fluentui-color-24-o')
+                                ->schema([
+                                    ColorPicker::make('site_theme.primary')->rgb(),
+                                    ColorPicker::make('site_theme.secondary')->rgb(),
+                                    ColorPicker::make('site_theme.gray')->rgb(),
+                                ]),
+                        ]),
+                        Group::make([
+                            Section::make('Notification Colors')
+                                ->icon('fluentui-color-24-o')
+                                ->schema([
+                                    ColorPicker::make('site_theme.success')->rgb(),
+                                    ColorPicker::make('site_theme.danger')->rgb(),
+                                    ColorPicker::make('site_theme.info')->rgb(),
+                                    ColorPicker::make('site_theme.warning')->rgb(),
+                                ]),
+                        ]),
                     ]),
             ]);
     }
