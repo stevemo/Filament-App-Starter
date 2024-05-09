@@ -17,9 +17,11 @@ class ManageGeneralSetting extends SettingsPage
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Control Panel';
 
-    protected static ?string $navigationLabel = 'General';
+    protected static ?string $navigationLabel = 'Settings';
+
+    protected static ?string $title = 'Settings';
 
     protected static string $settings = GeneralSettings::class;
 

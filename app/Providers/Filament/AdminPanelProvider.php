@@ -51,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
                     ->url(fn (): string => EditProfile::getUrl())
                     ->label(fn (): string => auth()->user()->name),
             ])
+            ->navigationGroups(['Control Panel'])
 
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->sidebarFullyCollapsibleOnDesktop()
