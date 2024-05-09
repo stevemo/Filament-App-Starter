@@ -49,56 +49,7 @@ class ManageGeneralSetting extends SettingsPage
                     ->tabs([
                         $this->siteTab(),
                         $this->colorTab(),
-                        Tabs\Tab::make('Components')
-                            ->icon('fluentui-puzzle-piece-24')
-                            ->columns(4)
-                            ->schema([
-                                ToggleButtons::make('pagination')
-                                    ->hint('To customize the default number of records shown')
-                                    ->multiple()
-                                    ->inline()
-                                    ->required()
-                                    ->columnSpan(2)
-                                    ->options([
-                                        'all' => 'All',
-                                        10    => 10,
-                                        25    => 25,
-                                        50    => 50,
-                                        75    => 75,
-                                    ]),
-
-                                Radio::make('date_time_display_format')
-                                    ->required()
-                                    ->columns(2)
-                                    ->columnSpan(3)
-                                    ->columnStart(1)
-                                    ->options([
-                                        'M j, Y H:i' => now()->format('M j, Y H:i'),
-                                        'M j, Y h:i' => now()->format('M j, Y h:i'),
-                                        'j M, Y H:i' => now()->format('j M, Y H:i'),
-                                        'j M, Y h:i' => now()->format('j M, Y h:i'),
-                                    ])
-                                    ->descriptions([
-                                        'M j, Y H:i' => 'Month Day Year in 24 Hours Format',
-                                        'M j, Y h:i' => 'Month Day Year in 12 Hours Format',
-                                        'j M, Y H:i' => 'Day Month Year in 24 Hours Format',
-                                        'j M, Y h:i' => 'Day Month Year in 12 Hours Format',
-                                    ]),
-
-                                Radio::make('datepicker_format')
-                                    ->required()
-                                    ->columns(2)
-                                    ->columnSpan(3)
-                                    ->columnStart(1)
-                                    ->options([
-                                        'M j, Y' => now()->format('M j, Y'),
-                                        'j M, Y' => now()->format('j M, Y'),
-                                    ])
-                                    ->descriptions([
-                                        'M j, Y' => 'Month Day Year',
-                                        'j M, Y' => 'Day Month Year',
-                                    ]),
-                            ]),
+                        $this->componentsTab(),
                     ]),
             ]);
     }
@@ -180,6 +131,68 @@ class ManageGeneralSetting extends SettingsPage
                                     ColorPicker::make('site_theme.warning')->rgb(),
                                 ]),
                         ]),
+                    ]),
+            ]);
+    }
+
+    protected function componentsTab(): Tabs\Tab
+    {
+        return Tabs\Tab::make('Components')
+            ->icon('fluentui-puzzle-piece-24')
+            ->schema([
+                Section::make('Pagination')
+                    ->description('To customize the default number of records shown')
+                    ->schema([
+                        ToggleButtons::make('pagination')
+                            ->hiddenLabel()
+                            ->multiple()
+                            ->inline()
+                            ->required()
+                            ->columnSpan(2)
+                            ->options([
+                                'all' => 'All',
+                                10    => 10,
+                                25    => 25,
+                                50    => 50,
+                                75    => 75,
+                            ]),
+                    ]),
+
+                Section::make('Date & Time Format')
+                    ->description('To customize tables and infolists entries.')
+                    ->schema([
+                        Radio::make('date_time_display_format')
+                            ->hiddenLabel()
+                            ->inline()
+                            ->required()
+                            ->options([
+                                'M j, Y H:i' => now()->format('M j, Y H:i'),
+                                'M j, Y h:i' => now()->format('M j, Y h:i'),
+                                'j M, Y H:i' => now()->format('j M, Y H:i'),
+                                'j M, Y h:i' => now()->format('j M, Y h:i'),
+                            ])
+                            ->descriptions([
+                                'M j, Y H:i' => 'Month Day Year in 24 Hours Format',
+                                'M j, Y h:i' => 'Month Day Year in 12 Hours Format',
+                                'j M, Y H:i' => 'Day Month Year in 24 Hours Format',
+                                'j M, Y h:i' => 'Day Month Year in 12 Hours Format',
+                            ]),
+                    ]),
+                Section::make('Date Picker Format')
+                    ->description('To customize date picker display format')
+                    ->schema([
+                        Radio::make('datepicker_format')
+                            ->inline()
+                            ->hiddenLabel()
+                            ->required()
+                            ->options([
+                                'M j, Y' => now()->format('M j, Y'),
+                                'j M, Y' => now()->format('j M, Y'),
+                            ])
+                            ->descriptions([
+                                'M j, Y' => 'Month Day Year',
+                                'j M, Y' => 'Day Month Year',
+                            ]),
                     ]),
             ]);
     }
