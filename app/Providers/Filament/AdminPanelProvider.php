@@ -75,7 +75,7 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\FilamentInfoWidget::class,
             ])
             ->plugins([
-                $this->enableShieldPlugin(),
+                $this->shieldPlugin(),
                 $this->laravelLogPlugin(),
             ])
             ->middleware([
@@ -94,7 +94,7 @@ class AdminPanelProvider extends PanelProvider
             ]);
     }
 
-    protected function enableShieldPlugin(): FilamentShieldPlugin
+    protected function shieldPlugin(): FilamentShieldPlugin
     {
         return FilamentShieldPlugin::make()
             ->gridColumns([
@@ -125,7 +125,7 @@ class AdminPanelProvider extends PanelProvider
             ->slug('logs');
     }
 
-    public function configureComponents(): void
+    protected function configureComponents(): void
     {
         /** @var GeneralSettings */
         $settings = app(GeneralSettings::class);
